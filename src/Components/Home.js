@@ -9,19 +9,32 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import TextField from '@material-ui/core/TextField';
+import AttachFile from '@material-ui/icons/AttachFile';
+import {HomeStyle} from './HomeStyle.js'
+import { Button } from '@material-ui/core';
 
-class Featured extends React.Component{
+
+
+class Home extends React.Component{
   constructor(){
     super();
   
  this.state = {
             Open: false,
+            listTitle: "Select a format",
+            file: null
         }}
 
-        handleClick = () => {
+handle_ListTitle = () => {
           this.setState({ Open: !this.state.Open });
-          // this.props.DeselectItem();
-      }
+}
+
+handle_ListChild = ( text ) => {
+  this.setState({ Open: !this.state.Open, listTitle: text });
+}
+
+
 
   render(){
 
@@ -39,21 +52,19 @@ class Featured extends React.Component{
       <div className="col-md-12">
         <div className="content third-content">
           <div className="row">
-            {/* <div className="col-md-7 left-image">
-              <img src={FeaturedImage}/>
-            </div> */}
             <div className="col-md-5">
               <div className="right-feature-text">
                 <h4>Manipulate your video</h4>
+                <h5>Please select a format from below :</h5>
                 <List
                 component="nav"
-                aria-labelledby="nested-list-subheader" style={{width:"15vw"}} >
+                aria-labelledby="nested-list-subheader" style={{width:"50%"}} >
 
-                <ListItem button onClick={this.handleClick}>
+                <ListItem button onClick={this.handle_ListTitle} style={{border:"1px solid #ccc",borderRadius:5}}>
                     <ListItemIcon style={{minWidth:'25px'}}>
                         <InboxIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Select a format" />
+                    <ListItemText primary={this.state.listTitle} />
                     {Open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={Open} timeout="auto" unmountOnExit>
@@ -61,33 +72,42 @@ class Featured extends React.Component{
                         {
                             ['Only Audio', 'Only Video', 'Gif Preview']
                                 .map((text, index) => (
-                                    <ListItem button  onClick={()=>console.log(text)}>
+                                    <ListItem button  onClick={()=>this.handle_ListChild(text)} 
+                                    style={index === 2 ? HomeStyle.ListChild_Last: HomeStyle.ListChild }>
                                         <ListItemIcon style={{marginLeft:'10px',minWidth:'25px'}}>
                                             <StarBorder />
                                         </ListItemIcon>
                                         <ListItemText primary={text} key={text} />
                                     </ListItem>
                                 ))
-
                         }
 
                     </List>
                 </Collapse>
             </List>
+            <h5>Enter video url below :</h5>
 
-                <p>Lorem ipsum dolor amet, consecte adipiscing elit, quisque dictum convallis mi. In dapibus auctor dictum donec mattis quis eros ultricies feugiat. Morbi congue faucibus mi, ague blandit curabitur ac lacinia.</p>
-                <div className="feature-list">
-                  <ul>
-                    <p>- Suspendisse mattis finibus sem</p>
-                    <p>- Pellentesque et urna vel lectus</p>
-                    <p>- Vestibulum iaculis nisi dui</p>
-                    <p>- Donec sagittis eros , ac tempus ligula</p>
-                    <p>- Integer sapien risus, auctor</p>
-                  </ul>
-                </div>
-                <div className="primary-button">
+          <input style={HomeStyle.inputStyle}  placeholder="Enter video URL" type="text"/>
+<br></br>            
+                <Button
+                  raised="true"
+                   component="label" 
+                   color="primary"
+                   variant="contained"
+                   style={{width:'30%', marginTop:'5%', backgroundColor:'#ffbb05'}}
+                  >
+                    <AttachFile />
+                  <input
+                    onChange={e => this.setState({file: e.target.files[0]})}
+                    style= {{ display: 'none' }}
+                    type="file"
+                  />
+                  <p style={HomeStyle.fileButtonText}>{this.state.file && this.state.file.name}</p>
+                </Button>
+             
+                {/* <div className="primary-button">
                   <a href="#">Discover More</a>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -102,4 +122,4 @@ class Featured extends React.Component{
   
 }
 
-export default Featured;
+export default Home;

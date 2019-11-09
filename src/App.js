@@ -13,7 +13,7 @@ import contactIcon from './Assets/img/contact-icon.png';
 import $ from 'jquery';
 import Welcome from './Components/Welcome';
 import About from './Components/About';
-import Featured from './Components/Featured';
+import Home from './Components/Home';
 import Projects from './Components/Projects';
 import Contact from './Components/Contact';
 
@@ -95,11 +95,11 @@ class App extends React.Component {
               <nav >
                 <span className="cd-marker item-1"></span>
                 <ul>
-                  <li><div className="image-icon" onClick={() => this.setDisplay('welcome')}><img src={homeIcon} /></div><h6>Welcome</h6></li>
+                  <li><div className="image-icon" onClick={() => this.setDisplay('welcome')}><img src={contactIcon} /></div><h6>Welcome</h6></li>
+                  <li><div className="image-icon" onClick={() => this.setDisplay('home')}><img src={homeIcon} /></div><h6>Home</h6></li>                 
                   <li><div className="image-icon" onClick={() => this.setDisplay('about us')}><img src={aboutIcon} /></div><h6>About Us</h6></li>
-                  <li><div className="image-icon" onClick={() => this.setDisplay('home')}><img src={featuredIcon} /></div><h6>Featured</h6></li>
-                  <li><div className="image-icon" onClick={() => this.setDisplay('projects')}><img src={projectsIcon} /></div><h6>Projects</h6></li>
-                  <li><div className="image-icon" onClick={() => this.setDisplay('contact')}><img src={contactIcon} /></div><h6>Contact Us</h6></li>
+                  {/* <li><div className="image-icon" onClick={() => this.setDisplay('projects')}><img src={projectsIcon} /></div><h6>Projects</h6></li>
+                  <li><div className="image-icon" onClick={() => this.setDisplay('contact')}><img src={contactIcon} /></div><h6>Contact Us</h6></li> */}
                 </ul>
               </nav>
             </div>
@@ -113,11 +113,11 @@ class App extends React.Component {
                 : this.state.display === 'about us'
                   ? <About />
                   : this.state.display === 'home'
-                    ? <Featured />
-                    : this.state.display === 'projects'
-                      ? <Projects />
-                      : this.state.display === 'contact'
-                        ? <Contact />
+                    ? <Home />
+                    // : this.state.display === 'projects'
+                    //   ? <Projects />
+                    //   : this.state.display === 'contact'
+                    //     ? <Contact />
                         : console.log()
             }
 
