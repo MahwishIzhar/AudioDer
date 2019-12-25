@@ -9,11 +9,11 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
-import TextField from '@material-ui/core/TextField';
 import AttachFile from '@material-ui/icons/AttachFile';
 import {HomeStyle} from './HomeStyle.js'
 import { Button } from '@material-ui/core';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import Download from '@axetroy/react-download';
 
 
 class Home extends React.Component{
@@ -23,7 +23,11 @@ class Home extends React.Component{
  this.state = {
             Open: false,
             listTitle: "Select a format",
-            file: null
+            file: null,
+            showToast: false,
+            vertical: 'top',
+            horizontal: 'center',
+            downloaded_file: null
         }}
 
 handle_ListTitle = () => {
@@ -34,11 +38,46 @@ handle_ListChild = ( text ) => {
   this.setState({ Open: !this.state.Open, listTitle: text });
 }
 
+ handleToastShow =  () => {
+
+  let data = new FormData()
+  data.append('file', this.state.file)
+
+  // console.log(this.state.file)
+
+ 
+  fetch('http://localhost:5000/convertToaudio', {
+    // headers: {
+    //   'Content-Type': 'application/x-www-form-urlencoded'
+    // },
+    method: "POST",
+    body: data
+  }).then(function(response) {
+//  console.log(response.)
+    return response.blob();
+  }).then(function(data) {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download','audio.mp3');  // 3. Append to html page
+    document.body.appendChild(link);  // 4. Force download
+    link.click();  // 5. Clean up and remove the link
+    link.parentNode.removeChild(link);
+  // this.setState({downloaded_file:data})
+  });
+  // this.setState({ showToast: true });
+  setTimeout(()=>this.handleToastHide(),2000)
+};
+
+ handleToastHide = () => {
+  this.setState({ ...this.state, showToast: false });
+};
+
 
 
   render(){
 
-    const { Open } = this.state;
+    const { Open, vertical, horizontal } = this.state;
 
   return(
         <li className="selected animated fadeInRight">
@@ -85,16 +124,21 @@ handle_ListChild = ( text ) => {
                     </List>
                 </Collapse>
             </List>
-            <h5>Enter video url below :</h5>
+            {/* <h5>Enter video url below :</h5>
 
-          <input style={HomeStyle.inputStyle}  placeholder="Enter video URL" type="text"/>
+          <input style={HomeStyle.inputStyle}  placeholder="Enter video URL" type="text"/> */}
 <br></br>            
+
+{/* <h3 style={{marginLeft:'20%'}}>OR</h3> */}
+<div style={{display:'flex',flexDirection:'row', justifyContent:'space-between',alignItems:'center',width:'60%'}}>
+<h5>Attach a video :</h5>
+
                 <Button
                   raised="true"
                    component="label" 
                    color="primary"
                    variant="contained"
-                   style={{width:'30%', marginTop:'5%', backgroundColor:'#ffbb05'}}
+                   style={{width:'55%', marginTop:'2%', backgroundColor:'#2f4ba8'}}
                   >
                     <AttachFile />
                   <input
@@ -104,10 +148,27 @@ handle_ListChild = ( text ) => {
                   />
                   <p style={HomeStyle.fileButtonText}>{this.state.file && this.state.file.name}</p>
                 </Button>
-             
-                {/* <div className="primary-button">
-                  <a href="#">Discover More</a>
-                </div> */}
+                </div>
+
+                <button className="primary-button" onClick={()=>this.handleToastShow()} style={{marginLeft:'15%'}} >Download</button>
+            
+
+
+                {/* <Download file={'asdasd.mp3'} content={this.state.downloaded_file}>
+                  <button type="button">Download</button>
+                </Download> */}
+
+
+                <Snackbar
+             anchorOrigin={{ vertical, horizontal }}
+              key={`${vertical},${horizontal}`}
+              open={this.state.showToast}
+              onClose={this.handleToastHide}
+              ContentProps={{
+                'aria-describedby': 'message-id',
+              }}
+              message={<span id="message-id">Working on this feature !</span>}
+            />
               </div>
             </div>
           </div>

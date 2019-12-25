@@ -22,9 +22,9 @@ const About =()=>{
               <div className="right-about-text">
                 <h4>Who we are?</h4>
                 <p>Fusce neque leo, dapibus sed imperdiet sed, vulputate sed purus. Nam eget justo in nibh facilisis rhoncus. Donec et risus non mauris lobortis convallis. Aliquam id urna quis ante blandit semper.</p>
-                <div className="primary-button">
-                  <a href="#">Discover More</a>
-                </div>
+         
+                <button className="primary-button" onClick={()=>console.log()}>Discover More</button>
+                
               </div>
             </div>
           </div>
@@ -33,9 +33,7 @@ const About =()=>{
               <div className="left-about-text">
                 <h4>What we do?</h4>
                 <p>Nam aliquam ultrices interdum. Vivamus metus mi, accumsan a tincidunt a, efficitur id felis. Vivamus non nibh malesuada, vestibulum nulla in, iaculis sem. Aenean tincidunt faucibus ipsum, ac aliquet nunc accumsan sed. Nulla sodales nunc sit amet libero egestas, ut interdum ex congue.</p>
-                <div className="primary-button">
-                  <a href="#">Discover More</a>
-                </div>
+                <button className="primary-button" onClick={()=>console.log()}>Discover More</button>
               </div>
             </div>
             <div className="col-md-5 right-image">

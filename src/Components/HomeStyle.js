@@ -23,6 +23,11 @@ inputStyle:{
     borderRadius: '4px',
     boxSizing: 'border-box'
     // boxSizing: 'content-box'
+},
+fileButtonText:{
+    color:'white',
+    overflow: 'hidden', 
+    textOverflow:  'ellipsis'
 }
 
 }

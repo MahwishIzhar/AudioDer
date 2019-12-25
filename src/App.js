@@ -9,7 +9,7 @@ import homeIcon from './Assets/img/home-icon.png';
 import aboutIcon from './Assets/img/about-icon.png';
 import featuredIcon from './Assets/img/featured-icon.png';
 import projectsIcon from './Assets/img/projects-icon.png';
-import contactIcon from './Assets/img/contact-icon.png';
+import welcomeIcon from './Assets/img/welcome.png';
 import $ from 'jquery';
 import Welcome from './Components/Welcome';
 import About from './Components/About';
@@ -95,7 +95,7 @@ class App extends React.Component {
               <nav >
                 <span className="cd-marker item-1"></span>
                 <ul>
-                  <li><div className="image-icon" onClick={() => this.setDisplay('welcome')}><img src={contactIcon} /></div><h6>Welcome</h6></li>
+                  <li><div className="image-icon" onClick={() => this.setDisplay('welcome')}><img src={welcomeIcon} /></div><h6>Welcome</h6></li>
                   <li><div className="image-icon" onClick={() => this.setDisplay('home')}><img src={homeIcon} /></div><h6>Home</h6></li>                 
                   <li><div className="image-icon" onClick={() => this.setDisplay('about us')}><img src={aboutIcon} /></div><h6>About Us</h6></li>
                   {/* <li><div className="image-icon" onClick={() => this.setDisplay('projects')}><img src={projectsIcon} /></div><h6>Projects</h6></li>
