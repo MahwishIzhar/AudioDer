@@ -16,7 +16,7 @@ return(
                     <div className="content first-content">
                         <h4>Let's explore AudioDer</h4>
                         <p>AudioDer is free and open source video manipulation platform. It is designed on top of ffmpeg library to give users a user friendly platform
-                            where the users can upload a video or place the URL of the video and get the desired results. 
+                            where the users can upload a video and get the desired results. 
                         </p>
                        {/* <div className="primary-button">
                            <a href="#" onClick={()=>prop.onClick('home')}>Get Started</a> 

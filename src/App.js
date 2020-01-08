@@ -16,6 +16,7 @@ import About from './Components/About';
 import Home from './Components/Home';
 import Projects from './Components/Projects';
 import Contact from './Components/Contact';
+import LoadingOverlay from 'react-loading-overlay';
 
 class App extends React.Component {
 
@@ -69,11 +70,17 @@ class App extends React.Component {
     super()
     this.state = {
       display: 'welcome',
+      isActive: false
     }
   }
 
   setDisplay = (newDisplay) => {
     this.setState({ display: newDisplay });
+  }
+
+
+  setActive = ( isActive ) => {
+    this.setState({ isActive });
   }
 
   render() {
@@ -87,6 +94,14 @@ class App extends React.Component {
             Your browser does not support the video tag.
             </video>
         </section>
+
+        <LoadingOverlay
+      active={this.state.isActive}
+      spinner
+      text='Loading ...'
+      >
+ 
+
 
         <section className="cd-hero">
           <div>
@@ -113,7 +128,7 @@ class App extends React.Component {
                 : this.state.display === 'about us'
                   ? <About />
                   : this.state.display === 'home'
-                    ? <Home />
+                    ? <Home setActive={this.setActive}/>
                     // : this.state.display === 'projects'
                     //   ? <Projects />
                     //   : this.state.display === 'contact'
@@ -125,6 +140,7 @@ class App extends React.Component {
 
         </section>
 
+        </LoadingOverlay>
       </div>
     );
   }

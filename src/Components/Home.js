@@ -25,6 +25,7 @@ class Home extends React.Component{
             listTitle: "Select a format",
             file: null,
             showToast: false,
+            showStartbtn: false,
             vertical: 'top',
             horizontal: 'center',
             downloaded_file: null
@@ -35,49 +36,107 @@ handle_ListTitle = () => {
 }
 
 handle_ListChild = ( text ) => {
-  this.setState({ Open: !this.state.Open, listTitle: text });
+  this.setState({ Open: !this.state.Open, listTitle: text, showStartbtn: true });
 }
 
- handleToastShow =  () => {
+ handle_btnStart =  () => {
 
-  let data = new FormData()
-  data.append('file', this.state.file)
+if( this.state.file )
+{
+  if( this.state.listTitle == 'Convert To Audio' )
+  {
+    let data = new FormData()
+    data.append('file', this.state.file)
 
-  // console.log(this.state.file)
+    this.props.setActive(true)
+    let that = this
+  
+    fetch('http://192.168.1.108:5000/convertToaudio', {
+      method: "POST",
+      body: data
+    }).then(function(response) {
+  //  console.log(response.)
+      return response.blob();
+    }).then(function(data) {
+
+      that.props.setActive(false)
+
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download','audio.mp3');  // 3. Append to html page
+      document.body.appendChild(link);  // 4. Force download
+      link.click();  // 5. Clean up and remove the link
+      link.parentNode.removeChild(link);
+   
+    });
+  }
+
+  if( this.state.listTitle == 'Convert To GIF preview' )
+  {
+    let data = new FormData()
+    data.append('file', this.state.file)
+    this.props.setActive(true)
+let that = this
+  
+    fetch('http://192.168.1.108:5000/convertTogif', {
+      method: "POST",
+      body: data
+    }).then(function(response) {
+  //  console.log(response.)
+  return response.blob();
+}).then(function(data) {
+  that.props.setActive(false)
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download',`preview.gif`);  // 3. Append to html page
+  document.body.appendChild(link);  // 4. Force download
+  link.click();  // 5. Clean up and remove the link
+  link.parentNode.removeChild(link);
+    });
+  }
+
+  if( this.state.listTitle == 'Only Video' )
+  {
+    let data = new FormData()
+    data.append('file', this.state.file)
+    this.props.setActive(true)
+    let that = this
+    let name = this.state.file.name.split('.')
+  
+    fetch('http://192.168.1.108:5000/onlyVideo', {
+      method: "POST",
+      body: data
+    }).then(function(response) {
+   return response.blob();
+}).then(function(data) {
+  that.props.setActive(true)
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download',`video.${name[1]}`);  // 3. Append to html page
+  document.body.appendChild(link);  // 4. Force download
+  link.click();  // 5. Clean up and remove the link
+  link.parentNode.removeChild(link);
+    });
+  }
+}
+
+else
+{
+  alert('Please select a conversion format');
+}
+ 
+ 
+};
 
  
-  fetch('http://localhost:5000/convertToaudio', {
-    // headers: {
-    //   'Content-Type': 'application/x-www-form-urlencoded'
-    // },
-    method: "POST",
-    body: data
-  }).then(function(response) {
-//  console.log(response.)
-    return response.blob();
-  }).then(function(data) {
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download','audio.mp3');  // 3. Append to html page
-    document.body.appendChild(link);  // 4. Force download
-    link.click();  // 5. Clean up and remove the link
-    link.parentNode.removeChild(link);
-  // this.setState({downloaded_file:data})
-  });
-  // this.setState({ showToast: true });
-  setTimeout(()=>this.handleToastHide(),2000)
-};
-
- handleToastHide = () => {
-  this.setState({ ...this.state, showToast: false });
-};
-
 
 
   render(){
 
-    const { Open, vertical, horizontal } = this.state;
+    const { Open } = this.state;
 
   return(
         <li className="selected animated fadeInRight">
@@ -85,7 +144,7 @@ handle_ListChild = ( text ) => {
   <h1>Audioder</h1>
   <span>Easily manipulate your video into wonders</span> 
 </div>
-<div className="cd-half-width third-slide">
+<div className="cd-half-width third-slide"  >
   <div className="container">
     <div className="row">
       <div className="col-md-12">
@@ -97,9 +156,9 @@ handle_ListChild = ( text ) => {
                 <h5>Please select a format from below :</h5>
                 <List
                 component="nav"
-                aria-labelledby="nested-list-subheader" style={{width:"50%"}} >
+                aria-labelledby="nested-list-subheader" style={{width:"65%"}} >
 
-                <ListItem button onClick={this.handle_ListTitle} style={{border:"1px solid #ccc",borderRadius:5}}>
+                <ListItem button onClick={this.handle_ListTitle} style={{border:"1px solid #ccc",width:'100%',borderRadius:5}}>
                     <ListItemIcon style={{minWidth:'25px'}}>
                         <InboxIcon />
                     </ListItemIcon>
@@ -109,7 +168,7 @@ handle_ListChild = ( text ) => {
                 <Collapse in={Open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {
-                            ['Only Audio', 'Only Video', 'Gif Preview']
+                            ['Convert To Audio', 'Only Video', 'Convert To GIF preview']
                                 .map((text, index) => (
                                     <ListItem button  onClick={()=>this.handle_ListChild(text)} 
                                     style={index === 2 ? HomeStyle.ListChild_Last: HomeStyle.ListChild }>
@@ -131,7 +190,7 @@ handle_ListChild = ( text ) => {
 
 {/* <h3 style={{marginLeft:'20%'}}>OR</h3> */}
 <div style={{display:'flex',flexDirection:'row', justifyContent:'space-between',alignItems:'center',width:'60%'}}>
-<h5>Attach a video :</h5>
+<h5 style={{width: '100%'}}>Attach a video :</h5>
 
                 <Button
                   raised="true"
@@ -140,6 +199,7 @@ handle_ListChild = ( text ) => {
                    variant="contained"
                    style={{width:'55%', marginTop:'2%', backgroundColor:'#2f4ba8'}}
                   >
+                    <div style={{justifyContent: 'center',alignItems:'center',display:'flex',flexDirection:'row'}}>
                     <AttachFile />
                   <input
                     onChange={e => this.setState({file: e.target.files[0]})}
@@ -147,28 +207,18 @@ handle_ListChild = ( text ) => {
                     type="file"
                   />
                   <p style={HomeStyle.fileButtonText}>{this.state.file && this.state.file.name}</p>
+                  </div>
                 </Button>
                 </div>
 
-                <button className="primary-button" onClick={()=>this.handleToastShow()} style={{marginLeft:'15%'}} >Download</button>
+                {
+                  this.state.showStartbtn
+            ?    <button className="primary-button" onClick={()=>this.handle_btnStart()} style={{marginLeft:'15%'}} >Start</button>
+            : null
+                }
+
             
 
-
-                {/* <Download file={'asdasd.mp3'} content={this.state.downloaded_file}>
-                  <button type="button">Download</button>
-                </Download> */}
-
-
-                <Snackbar
-             anchorOrigin={{ vertical, horizontal }}
-              key={`${vertical},${horizontal}`}
-              open={this.state.showToast}
-              onClose={this.handleToastHide}
-              ContentProps={{
-                'aria-describedby': 'message-id',
-              }}
-              message={<span id="message-id">Working on this feature !</span>}
-            />
               </div>
             </div>
           </div>
